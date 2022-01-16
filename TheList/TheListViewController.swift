@@ -100,9 +100,9 @@ extension TheListViewController {
                 self.array.append(listTf.text!)
                
             }
-            //self.array.append(listTf.text ?? "Важное что-то без названия")
+            
             self.myTableView.reloadData()
-            //print(text)
+          
         }
         
         alert.addTextField { textField in
