@@ -12,6 +12,8 @@ class TheListViewController: UIViewController {
     
     var array = ["купить молоко", "сходить в зал", "почитать", "покодить", "позвонить папе"]
     
+    let defaults = UserDefaults.standard
+    
     private lazy var myTableView: UITableView = {
         let table = UITableView()
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -28,6 +30,8 @@ class TheListViewController: UIViewController {
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
         
+        guard let newArray = defaults.array(forKey: "TheListArray") as? [String] else { return }
+        array = newArray
      
         
        
@@ -100,6 +104,7 @@ extension TheListViewController {
                 self.array.append(listTf.text!)
                
             }
+            self.defaults.set(self.array, forKey: "TheListArray")
             
             self.myTableView.reloadData()
           
