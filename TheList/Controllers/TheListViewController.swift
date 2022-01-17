@@ -10,9 +10,9 @@ import SnapKit
 
 class TheListViewController: UIViewController {
     
-    var array = ["купить молоко", "сходить в зал", "почитать", "покодить", "позвонить папе"]
+    var array = [ItemModel]()
     
-    let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     private lazy var myTableView: UITableView = {
         let table = UITableView()
@@ -23,19 +23,14 @@ class TheListViewController: UIViewController {
         return table
         
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.addSubviews(myTableView)
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
-        
-        guard let newArray = defaults.array(forKey: "TheListArray") as? [String] else { return }
-        array = newArray
-     
-        
-       
-       
+        loadItems()
         
     }
     
@@ -49,27 +44,15 @@ class TheListViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
         navigationItem.rightBarButtonItem?.tintColor = .white
-      
-    
     }
-
-   
-
-
 }
 
 extension TheListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
-        
+        array[indexPath.row].isDone = !array[indexPath.row].isDone
+        saveItem()
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
 }
 
 extension TheListViewController: UITableViewDataSource {
@@ -79,35 +62,55 @@ extension TheListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let item = array[indexPath.row]
         cell.backgroundColor = .white
-        cell.textLabel?.text = array[indexPath.row]
+        cell.textLabel?.text = item.title
+        // ternary operator
+        cell.accessoryType = item.isDone ? .checkmark : .none
         return cell
     }
-    
-    
 }
 
 
 
 extension TheListViewController {
-    @objc func addButtonPressed() {
+    
+    func saveItem() {
         
-       
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(array)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array \(error)")
+        }
+        myTableView.reloadData()
+    }
+    
+    func loadItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                array = try decoder.decode([ItemModel].self, from: data)
+            } catch{
+                print("Error decoding item array \(error)")
+            }
+        }
+    }
+    
+    
+    @objc func addButtonPressed() {
         
         var listTf = UITextField()
         let alert = UIAlertController(title: "Добавть в список", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Добавить", style: .default) { action in
-            if listTf.text == "" {
-                self.array.append("Важное что-то без названия")
-            } else {
-                self.array.append(listTf.text!)
-               
-            }
-            self.defaults.set(self.array, forKey: "TheListArray")
             
-            self.myTableView.reloadData()
-          
+            let newItem = ItemModel()
+            newItem.title = listTf.text!
+            self.array.append(newItem)
+            self.saveItem()
         }
         
         alert.addTextField { textField in
@@ -117,7 +120,6 @@ extension TheListViewController {
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        
     }
     
     func setupLayout() {
@@ -125,7 +127,5 @@ extension TheListViewController {
         myTableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
     }
 }
-
