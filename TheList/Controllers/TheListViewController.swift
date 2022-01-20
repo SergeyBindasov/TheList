@@ -52,7 +52,9 @@ class TheListViewController: UIViewController {
 
 extension TheListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+                
         array[indexPath.row].isDone = !array[indexPath.row].isDone
+        
         saveItem()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -96,7 +98,11 @@ extension TheListViewController {
         } catch {
             print("error fetching data from context \(error)")
         }
+    }
     
+    func destroyItem(indexPath: Int) {
+        context.delete(array[indexPath])
+        array.remove(at: indexPath)
     }
     
     
