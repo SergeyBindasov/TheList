@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navcontroller = UINavigationController()
         
-        navcontroller.viewControllers = [TheListViewController()]
+        navcontroller.viewControllers = [CategoryViewController()]
         
 
         

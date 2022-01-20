@@ -13,6 +13,12 @@ class TheListViewController: UIViewController {
     
     var array = [Item]()
     
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
@@ -29,23 +35,21 @@ class TheListViewController: UIViewController {
         table.dataSource = self
         table.delegate = self
         return table
-        
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubviews(searchBar, myTableView)
+    
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
-        loadItems()
-        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
         /// NAVIGATION BAR
-        title = "The List"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "My List"
+        navigationController?.isNavigationBarHidden = false
+        navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         navigationController?.navigationBar.barStyle = UIBarStyle.black
         navigationController?.navigationBar.isTranslucent = true
@@ -68,8 +72,18 @@ extension TheListViewController {
         myTableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
-
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        
+       
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+      
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+    } else {
+                request.predicate = categoryPredicate
+            }
+        
         
         do {
             array = try context.fetch(request)
@@ -96,6 +110,7 @@ extension TheListViewController {
             let newItem = Item(context: self.context)
             newItem.title = listTf.text!
             newItem.isDone = false
+            newItem.parentCategory = self.selectedCategory
             self.array.append(newItem)
             self.saveItem()
         }
@@ -110,6 +125,7 @@ extension TheListViewController {
     }
     
     func setupLayout() {
+        view.addSubviews(searchBar, myTableView)
         
         searchBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -128,10 +144,11 @@ extension TheListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
        
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
