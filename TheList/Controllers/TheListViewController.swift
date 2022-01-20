@@ -7,12 +7,15 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class TheListViewController: UIViewController {
     
-    var array = [ItemModel]()
+    var array = [Item]()
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     private lazy var myTableView: UITableView = {
         let table = UITableView()
@@ -30,7 +33,7 @@ class TheListViewController: UIViewController {
         view.addSubviews(myTableView)
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
-        loadItems()
+        //loadItems()
         
     }
     
@@ -77,27 +80,25 @@ extension TheListViewController {
     
     func saveItem() {
         
-        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(array)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array \(error)")
+            print ("error saving context \(error)")
         }
         myTableView.reloadData()
     }
     
-    func loadItems() {
-        
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                array = try decoder.decode([ItemModel].self, from: data)
-            } catch{
-                print("Error decoding item array \(error)")
-            }
-        }
-    }
+//    func loadItems() {
+//
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder()
+//            do {
+//                array = try decoder.decode([Item].self, from: data)
+//            } catch{
+//                print("Error decoding item array \(error)")
+//            }
+//        }
+//    }
     
     
     @objc func addButtonPressed() {
@@ -107,8 +108,10 @@ extension TheListViewController {
         
         let action = UIAlertAction(title: "Добавить", style: .default) { action in
             
-            let newItem = ItemModel()
+            
+            let newItem = Item(context: self.context)
             newItem.title = listTf.text!
+            newItem.isDone = false
             self.array.append(newItem)
             self.saveItem()
         }

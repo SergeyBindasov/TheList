@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1116E82D2ED90748009B2B50 /* Pods_TheList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F8E1631A0C18F7D5184FB0B /* Pods_TheList.framework */; };
 		A5846A192794011D002710FB /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5846A182794011D002710FB /* Help.swift */; };
-		A5C23592279575E6009474E2 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C23591279575E6009474E2 /* ItemModel.swift */; };
+		A5C23598279598E6009474E2 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C23596279598E6009474E2 /* DataModel.xcdatamodeld */; };
 		A5E9EC552790614B00587014 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E9EC542790614B00587014 /* AppDelegate.swift */; };
 		A5E9EC572790614B00587014 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E9EC562790614B00587014 /* SceneDelegate.swift */; };
 		A5E9EC592790614B00587014 /* TheListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E9EC582790614B00587014 /* TheListViewController.swift */; };
@@ -21,7 +21,7 @@
 		3F8E1631A0C18F7D5184FB0B /* Pods_TheList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		442D7E170B8D5BC44AC054B3 /* Pods-TheList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheList.debug.xcconfig"; path = "Target Support Files/Pods-TheList/Pods-TheList.debug.xcconfig"; sourceTree = "<group>"; };
 		A5846A182794011D002710FB /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
-		A5C23591279575E6009474E2 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
+		A5C23597279598E6009474E2 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		A5E9EC512790614B00587014 /* TheList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E9EC542790614B00587014 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5E9EC562790614B00587014 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 		A5C2359327957608009474E2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A5C23591279575E6009474E2 /* ItemModel.swift */,
+				A5C23596279598E6009474E2 /* DataModel.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -232,9 +232,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5C23592279575E6009474E2 /* ItemModel.swift in Sources */,
 				A5846A192794011D002710FB /* Help.swift in Sources */,
 				A5E9EC592790614B00587014 /* TheListViewController.swift in Sources */,
+				A5C23598279598E6009474E2 /* DataModel.xcdatamodeld in Sources */,
 				A5E9EC552790614B00587014 /* AppDelegate.swift in Sources */,
 				A5E9EC572790614B00587014 /* SceneDelegate.swift in Sources */,
 			);
@@ -450,6 +450,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A5C23596279598E6009474E2 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A5C23597279598E6009474E2 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = A5C23597279598E6009474E2 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = A5E9EC492790614B00587014 /* Project object */;
 }
