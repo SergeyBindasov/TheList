@@ -33,7 +33,7 @@ class TheListViewController: UIViewController {
         view.addSubviews(myTableView)
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
-        //loadItems()
+        loadItems()
         
     }
     
@@ -88,17 +88,16 @@ extension TheListViewController {
         myTableView.reloadData()
     }
     
-//    func loadItems() {
-//
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//            do {
-//                array = try decoder.decode([Item].self, from: data)
-//            } catch{
-//                print("Error decoding item array \(error)")
-//            }
-//        }
-//    }
+    func loadItems() {
+
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            array = try context.fetch(request)
+        } catch {
+            print("error fetching data from context \(error)")
+        }
+    
+    }
     
     
     @objc func addButtonPressed() {
