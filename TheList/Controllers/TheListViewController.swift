@@ -7,19 +7,19 @@
 
 import UIKit
 import SnapKit
-import CoreData
+import RealmSwift
 
 class TheListViewController: UIViewController {
     
-    var array = [Item]()
+    let realm = try! Realm()
+    
+    var toDoItems: Results<Item>?
     
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
     private lazy var searchBar: UISearchBar = {
@@ -39,7 +39,6 @@ class TheListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
        
@@ -62,68 +61,54 @@ class TheListViewController: UIViewController {
 // MARK: -  TheListVC methods
 extension TheListViewController {
     
-    func saveItem() {
-        
-        do {
-            try context.save()
-        } catch {
-            print ("error saving context \(error)")
-        }
-        myTableView.reloadData()
-    }
-    
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-       
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-      
-        
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-    } else {
-                request.predicate = categoryPredicate
-            }
-        
-        
-        do {
-            array = try context.fetch(request)
-        } catch {
-            print("error fetching data from context \(error)")
-        }
+    func loadItems() {
+        toDoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         myTableView.reloadData()
     }
     
     func destroyItem(indexPath: Int) {
-        context.delete(array[indexPath])
-        array.remove(at: indexPath)
+        if let item = toDoItems?[indexPath] {
+            do {
+                try realm.write({
+                    realm.delete(item)
+                })
+            } catch{
+                print("Error deleting item \(error)")
+            }
+        }
+        myTableView.reloadData()
     }
-    
     
     @objc func addButtonPressed() {
         
         var listTf = UITextField()
         let alert = UIAlertController(title: "Добавть в список", message: "", preferredStyle: .alert)
-        
+
         let action = UIAlertAction(title: "Добавить", style: .default) { action in
-            
-            
-            let newItem = Item(context: self.context)
-            newItem.title = listTf.text!
-            newItem.isDone = false
-            newItem.parentCategory = self.selectedCategory
-            self.array.append(newItem)
-            self.saveItem()
-        }
+
+            if let currentCategory = self.selectedCategory {
+                do {
+                    try self.realm.write({
+                    let newItem = Item()
+                    newItem.title = listTf.text!
+                        newItem.dateCreated = Date()
+                    currentCategory.items.append(newItem)
+                })
+                } catch {
+                    print("Error saving new items \(error)")
+                }
+                self.myTableView.reloadData()
         
+            }
+        }
         alert.addTextField { textField in
             textField.placeholder = "Что-то очень важное"
             listTf = textField
         }
-        
         alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+            present(alert, animated: true, completion: nil)
     }
-    
+        
     func setupLayout() {
         view.addSubviews(searchBar, myTableView)
         
@@ -142,13 +127,8 @@ extension TheListViewController {
 extension TheListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-       
-        loadItems(with: request, predicate: predicate)
+        toDoItems = toDoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        myTableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -157,7 +137,6 @@ extension TheListViewController: UISearchBarDelegate {
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
-           
         }
     }
 }
@@ -165,30 +144,36 @@ extension TheListViewController: UISearchBarDelegate {
 // MARK: - TableView methods
 extension TheListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                
-        array[indexPath.row].isDone = !array[indexPath.row].isDone
+        if let item = toDoItems?[indexPath.row] {
+            do {
+                try realm.write({
+                    item.isDone = !item.isDone
+                })
+            } catch{
+                print("Error saving done status \(error)")
+            }
+        }
+        myTableView.reloadData()
         
-        saveItem()
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
+    
 
 extension TheListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return array.count
+        return toDoItems?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let item = array[indexPath.row]
         cell.backgroundColor = .white
-        cell.textLabel?.text = item.title
-        // ternary operator
-        cell.accessoryType = item.isDone ? .checkmark : .none
+        if let item = toDoItems?[indexPath.row] {
+            cell.textLabel?.text = item.title
+            cell.accessoryType = item.isDone ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = "Пока нет списков"
+        }
         return cell
     }
 }
-
-
-
-
