@@ -6,6 +6,7 @@ target 'TheList' do
   use_frameworks!
 pod 'SnapKit', '~> 5.0.0'
 pod 'RealmSwift', '~>10'
+pod 'SwipeCellKit'
 
   # Pods for TheList
 

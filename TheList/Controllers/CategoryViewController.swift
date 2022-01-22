@@ -7,25 +7,29 @@
 import UIKit
 import SnapKit
 import RealmSwift
+import SwipeCellKit
 
-class CategoryViewController: UIViewController {
+
+class CategoryViewController: SwipeViewController {
     
     let realm = try! Realm()
     
     var categories: Results<Category>?
     
+    
     private lazy var categoryTableView: UITableView = {
         let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(SwipeTableViewCell.self, forCellReuseIdentifier: "Cell")
         table.backgroundColor = .white
         table.dataSource = self
         table.delegate = self
+        table.rowHeight = 60
+
         return table
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupLayout()
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         loadCategories()
@@ -70,20 +74,19 @@ extension CategoryViewController {
         categoryTableView.reloadData()
     }
     
-  func destroyCategory(indexPath: Int) {
+ 
     
-    if let category = categories?[indexPath] {
-        do {
-            try realm.write({
-                realm.delete(category)
-            })
-            
-        } catch{
-            print("Error deleting item \(error)")
-        }
+    override func destroy(at indexPath: Int) {
+        if let category = categories?[indexPath] {
+               do {
+                   try realm.write({
+                       realm.delete(category)
+                   })
+               } catch{
+                   print("Error deleting item \(error)")
+               }
+           }
     }
-      categoryTableView.reloadData()
-  }
 
     @objc func addButtonPressed() {
         
@@ -115,29 +118,25 @@ extension CategoryViewController {
 
 // MARK: - Table View methods
 
-extension CategoryViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension CategoryViewController {
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 let listVC = TheListViewController()
+        listVC.title = categories?[indexPath.row].name
         listVC.selectedCategory = categories?[indexPath.row]
                 navigationController?.pushViewController(listVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
-    
-}
 
-extension CategoryViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories?.count ?? 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       let cell = super.tableView(tableView, cellForRowAt: indexPath)
+
         let category = categories?[indexPath.row]
         cell.textLabel?.text = category?.name ?? "Пока нет категорий"
         return cell
     }
-    
-    
 }
+

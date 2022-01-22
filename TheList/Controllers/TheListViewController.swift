@@ -8,8 +8,10 @@
 import UIKit
 import SnapKit
 import RealmSwift
+import SwipeCellKit
 
-class TheListViewController: UIViewController {
+
+class TheListViewController: SwipeViewController {
     
     let realm = try! Realm()
     
@@ -30,10 +32,11 @@ class TheListViewController: UIViewController {
     
     private lazy var myTableView: UITableView = {
         let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(SwipeTableViewCell.self, forCellReuseIdentifier: "Cell")
         table.backgroundColor = .white
         table.dataSource = self
         table.delegate = self
+        table.rowHeight = 60
         return table
     }()
     
@@ -46,7 +49,6 @@ class TheListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         /// NAVIGATION BAR
-        title = "My List"
         navigationController?.isNavigationBarHidden = false
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
@@ -66,19 +68,18 @@ extension TheListViewController {
         myTableView.reloadData()
     }
     
-    func destroyItem(indexPath: Int) {
+    override func destroy(at indexPath: Int) {
         if let item = toDoItems?[indexPath] {
-            do {
-                try realm.write({
-                    realm.delete(item)
-                })
-            } catch{
-                print("Error deleting item \(error)")
-            }
-        }
-        myTableView.reloadData()
+               do {
+                   try realm.write({
+                       realm.delete(item)
+                   })
+               } catch{
+                   print("Error deleting item \(error)")
+               }
+           }
     }
-    
+        
     @objc func addButtonPressed() {
         
         var listTf = UITextField()
@@ -142,7 +143,7 @@ extension TheListViewController: UISearchBarDelegate {
 }
 
 // MARK: - TableView methods
-extension TheListViewController: UITableViewDelegate {
+extension TheListViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let item = toDoItems?[indexPath.row] {
             do {
@@ -157,16 +158,13 @@ extension TheListViewController: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
-}
-    
 
-extension TheListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoItems?.count ?? 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+      let cell =  super.tableView(tableView, cellForRowAt: indexPath)
         cell.backgroundColor = .white
         if let item = toDoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
