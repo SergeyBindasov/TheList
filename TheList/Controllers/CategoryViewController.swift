@@ -92,12 +92,13 @@ extension CategoryViewController {
     @objc func addButtonPressed() {
         
         var listTf = UITextField()
+        let cString = UIColor.randomFlat().hexValue()
         let alert = UIAlertController(title: "Добавть новый список", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Добавить", style: .default) { action in
             let newCategory = Category()
             newCategory.name = listTf.text!
-            
+            newCategory.colorString = cString
             self.saveCategory(category: newCategory)
         }
         
@@ -134,7 +135,8 @@ extension CategoryViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.backgroundColor = UIColor.randomFlat()
+        let color = UIColor(hexString: (categories?[indexPath.row].colorString)!)
+        cell.backgroundColor = color
         let category = categories?[indexPath.row]
         cell.textLabel?.text = category?.name ?? "Пока нет категорий"
         return cell
