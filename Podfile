@@ -7,6 +7,7 @@ target 'TheList' do
 pod 'SnapKit', '~> 5.0.0'
 pod 'RealmSwift', '~>10'
 pod 'SwipeCellKit'
+pod 'ChameleonFramework/Swift'
 
   # Pods for TheList
 

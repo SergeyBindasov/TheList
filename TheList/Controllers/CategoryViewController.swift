@@ -8,6 +8,7 @@ import UIKit
 import SnapKit
 import RealmSwift
 import SwipeCellKit
+import ChameleonFramework
 
 
 class CategoryViewController: SwipeViewController {
@@ -133,7 +134,7 @@ extension CategoryViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-
+        cell.backgroundColor = UIColor.randomFlat()
         let category = categories?[indexPath.row]
         cell.textLabel?.text = category?.name ?? "Пока нет категорий"
         return cell
