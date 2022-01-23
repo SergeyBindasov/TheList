@@ -24,6 +24,8 @@ class TheListViewController: SwipeViewController {
         }
     }
     
+   
+    
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
@@ -44,21 +46,17 @@ class TheListViewController: SwipeViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         setupLayout()
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
         /// NAVIGATION BAR
-        navigationController?.isNavigationBarHidden = false
-        navigationItem.largeTitleDisplayMode = .never
-        navigationController?.navigationBar.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
-        navigationController?.navigationBar.barStyle = UIBarStyle.black
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        title = selectedCategory?.name
+        guard let color = selectedCategory?.colorString else { return }
+        view.backgroundColor = UIColor(hexString: color)
+        navigationController?.navigationBar.backgroundColor = UIColor(hexString: color)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
-        navigationItem.rightBarButtonItem?.tintColor = .white
+        
     }
 }
 

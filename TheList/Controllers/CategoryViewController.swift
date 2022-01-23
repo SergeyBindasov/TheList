@@ -31,24 +31,29 @@ class CategoryViewController: SwipeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupLayout()
         view.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
         loadCategories()
+        
+       
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
         /// NAVIGATION BAR
+      
         title = "The List"
-        navigationController?.isNavigationBarHidden = false
-        navigationItem.largeTitleDisplayMode = .automatic
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.prefersLargeTitles = true
+        //navigationController?.isNavigationBarHidden = false
+       // navigationItem.largeTitleDisplayMode = .automatic
+        //navigationController?.navigationBar.tintColor = .white
+        //navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = UIColor(red: 0.47, green: 0.44, blue: 0.65, alpha: 1.00)
-        navigationController?.navigationBar.barStyle = UIBarStyle.black
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        navigationController?.navigationBar.barStyle = UIBarStyle.black
+//        navigationController?.navigationBar.isTranslucent = true
+//        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
-        navigationItem.rightBarButtonItem?.tintColor = .white
+       // navigationItem.rightBarButtonItem?.tintColor = .white
     }
     
 }
@@ -123,7 +128,6 @@ extension CategoryViewController {
 extension CategoryViewController {
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 let listVC = TheListViewController()
-        listVC.title = categories?[indexPath.row].name
         listVC.selectedCategory = categories?[indexPath.row]
                 navigationController?.pushViewController(listVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)

@@ -15,7 +15,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         let navcontroller = UINavigationController()
-        
+        navcontroller.isNavigationBarHidden = false
+        navcontroller.navigationBar.prefersLargeTitles = true
+        navcontroller.navigationBar.tintColor = .white
+        navcontroller.navigationBar.barStyle = UIBarStyle.black
+        navcontroller.navigationBar.isTranslucent = true
+        navcontroller.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navcontroller.navigationBar.tintColor = .white
+        navcontroller.navigationItem.rightBarButtonItem?.tintColor = .white
         navcontroller.viewControllers = [CategoryViewController()]
         
 
