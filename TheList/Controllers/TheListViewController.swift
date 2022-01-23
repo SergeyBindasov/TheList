@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RealmSwift
 import SwipeCellKit
+import ChameleonFramework
 
 
 class TheListViewController: SwipeViewController {
@@ -37,6 +38,7 @@ class TheListViewController: SwipeViewController {
         table.dataSource = self
         table.delegate = self
         table.rowHeight = 60
+        table.separatorStyle = .none
         return table
     }()
     
@@ -169,6 +171,12 @@ extension TheListViewController {
         if let item = toDoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.isDone ? .checkmark : .none
+           
+            if let color = UIColor(hexString: selectedCategory!.colorString)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat (toDoItems!.count)) {
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            }
+            
         } else {
             cell.textLabel?.text = "Пока нет списков"
         }

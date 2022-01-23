@@ -25,7 +25,7 @@ class CategoryViewController: SwipeViewController {
         table.dataSource = self
         table.delegate = self
         table.rowHeight = 60
-
+        table.separatorStyle = .none
         return table
     }()
 
