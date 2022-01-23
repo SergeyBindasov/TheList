@@ -135,7 +135,7 @@ extension CategoryViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        let color = UIColor(hexString: (categories?[indexPath.row].colorString)!)
+        let color = UIColor(hexString: (categories?[indexPath.row].colorString) ?? "786FA6")
         cell.backgroundColor = color
         let category = categories?[indexPath.row]
         cell.textLabel?.text = category?.name ?? "Пока нет категорий"
