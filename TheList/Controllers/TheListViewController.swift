@@ -30,6 +30,7 @@ class TheListViewController: SwipeViewController {
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
         bar.delegate = self
+        bar.searchTextField.backgroundColor = .white
         return bar
     }()
     
@@ -54,6 +55,7 @@ class TheListViewController: SwipeViewController {
         title = selectedCategory?.name
         guard let color = selectedCategory?.colorString else { return }
         view.backgroundColor = UIColor(hexString: color)
+        searchBar.barTintColor = UIColor(hexString: color)
         navigationController?.navigationBar.backgroundColor = UIColor(hexString: color)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
         
