@@ -11,6 +11,6 @@
 * SwipeCellKit (взаимодйствие с ячейками tableView через свайп)
 * ChameleonFramework (цветовая палитра ячеек)
 ### Скриншоты
-![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot1.png)height="75%" width="75%"
-![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot2.png)
-![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot3.png)
+![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot1.png)[height="25%" width="25%"]
+![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot2.png){height="25%" width="25%"}
+![ScreenShot](https://github.com/SergeyBindasov/TheList/blob/progress/ScreenShot3.png)(height="25%" width="25%")
