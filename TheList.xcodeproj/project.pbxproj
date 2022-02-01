@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1116E82D2ED90748009B2B50 /* Pods_TheList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F8E1631A0C18F7D5184FB0B /* Pods_TheList.framework */; };
 		A52B545527995E53000A971D /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52B545427995E53000A971D /* CategoryViewController.swift */; };
+		A554D13027A95FAC009187C3 /* Pods_TheList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F8E1631A0C18F7D5184FB0B /* Pods_TheList.framework */; };
 		A55CE6E7279AE63D00A16F93 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55CE6E6279AE63D00A16F93 /* Item.swift */; };
 		A55CE6E9279AE64900A16F93 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55CE6E8279AE64900A16F93 /* Category.swift */; };
 		A57F2C18279C16BD0057C4DF /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F2C17279C16BD0057C4DF /* SwipeViewController.swift */; };
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1116E82D2ED90748009B2B50 /* Pods_TheList.framework in Frameworks */,
+				A554D13027A95FAC009187C3 /* Pods_TheList.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
