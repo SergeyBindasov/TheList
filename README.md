@@ -2,7 +2,7 @@
 ## Описание
 Тренировочное приложение The List для составления и хранения кастомных списков пользователей. Использование разных способов хранения локальных данных: UserDefaults, NSCoding, Core Data, Realm.
 ### Стек
-⋅⋅* Foundation
+* Foundation
 ⋅⋅* UIKit
 ⋅⋅* No storyboard
 ⋅⋅* Auto Layout (Snap Kit)
